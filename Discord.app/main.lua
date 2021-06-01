@@ -4,6 +4,7 @@
 local GUI = require("GUI")
 local system = require("System")
 
+--- maybe separate these??? config.lua??????
 -- define colors
 local bg = {
   primary = 0x36393f
@@ -23,6 +24,27 @@ local workspace, window, menu = system.addWindow(GUI.filledWindow(1, 1, 60, 20, 
 -- add layout
 local layout = window:addChild(GUI.layout(1, 1, window.width, window.height, 1, 1))
 
+local login = function()
+  -- remove items
+	layout:removeChildren()
+  workspace:stop()
+  -- add progress circle thing
+  local prog = layout:addChild(GUI.progressIndicator(1, 1, 0x3C3C3C, 0x00B640, 0x99FF80))
+  prog.active = true
+  workspace:draw()
+
+  -- send login request
+  local data = internet.request(
+    "http://panel.themeow.ml:6098/login",
+    "{\"token\": \"" .. bot_token .. "\"}",
+    {
+    	["Content-Type"] = "application/json"
+      ["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0" -- default from docs lmao
+    },
+  )
+  GUI.alert(data)
+end
+
 -- add text
 layout:addChild(GUI.text(1, 1, fg.text, "Hello " .. system.getUser() .. ", please enter discord token below."))
 layout:addChild(GUI.text(1, 2, fg.textmuted, "Middle click to paste."))
@@ -31,6 +53,10 @@ local token_input = layout:addChild(GUI.input(1, 3, 30, 3, 0xEEEEEE, 0x555555, 0
 token_input.onInputFinished = function()
   bot_token = token_input.text
 end
+
+-- add submit button
+local submit_button = workspace:addChild(GUI.roundedButton(1, 4, 30, 3, 0xFFFFFF, 0x555555, 0x880000, 0xFFFFFF, "Submit"))
+submit_button.onTouch = login
 
 -- context menu
 local contextMenu = menu:addContextMenuItem("File")
