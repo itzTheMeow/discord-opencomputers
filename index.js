@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
 const app = require('express')();
 const config = require('./config.json');
-//app.use(require('body-parser').json());
+app.use(require('body-parser').json());
 
 app.get('/', (req, res) => {
 	res.json({ success: true });
 });
 app.post('/login', (req, res) => {
-	console.log('Request: ', req.get('Content-Type'));
+	console.log('Request: ', req.get('Content-Type'), req.body);
 	let bot = new Discord.Client();
 	bot.on('ready', () => {
 		res.json({
