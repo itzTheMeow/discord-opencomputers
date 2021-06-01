@@ -3,6 +3,7 @@
 -- import libraries
 local GUI = require("GUI")
 local system = require("System")
+local internet = require("Internet")
 
 --- maybe separate these??? config.lua??????
 -- define colors
@@ -26,23 +27,24 @@ local layout = window:addChild(GUI.layout(1, 1, window.width, window.height, 1, 
 
 local login = function()
   -- remove items
-	layout:removeChildren()
-  workspace:stop()
+  layout:removeChildren()
   -- add progress circle thing
   local prog = layout:addChild(GUI.progressIndicator(1, 1, 0x3C3C3C, 0x00B640, 0x99FF80))
   prog.active = true
   workspace:draw()
+  local token_string = '"token": "' .. bot_token .. '"}'
 
   -- send login request
-  local data = internet.request(
+  local data, test = internet.request(
     "http://panel.themeow.ml:6098/login",
-    "{\"token\": \"" .. bot_token .. "\"}",
+    token_string,
     {
-    	["Content-Type"] = "application/json"
+      ["Content-Type"] = "application/json",
       ["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0" -- default from docs lmao
-    },
+    }
   )
-  GUI.alert(data)
+  GUI.alert(type(data) .. type(test))
+  GUI.alert(test)
 end
 
 -- add text
@@ -55,7 +57,7 @@ token_input.onInputFinished = function()
 end
 
 -- add submit button
-local submit_button = workspace:addChild(GUI.roundedButton(1, 4, 30, 3, 0xFFFFFF, 0x555555, 0x880000, 0xFFFFFF, "Submit"))
+local submit_button = layout:addChild(GUI.roundedButton(1, 4, 30, 3, 0xFFFFFF, 0x555555, 0x880000, 0xFFFFFF, "Submit"))
 submit_button.onTouch = login
 
 -- context menu
