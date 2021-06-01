@@ -29,22 +29,25 @@ local login = function()
   -- remove items
   layout:removeChildren()
   -- add progress circle thing
+  --- maybe add text that says logging in and changes throughout login process
   local prog = layout:addChild(GUI.progressIndicator(1, 1, 0x3C3C3C, 0x00B640, 0x99FF80))
   prog.active = true
   workspace:draw()
-  local token_string = '"token": "' .. bot_token .. '"}'
 
   -- send login request
   local data, test = internet.request(
     "http://panel.themeow.ml:6098/login",
-    token_string,
+    "token=" .. bot_token,
     {
-      ["Content-Type"] = "application/json",
       ["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0" -- default from docs lmao
     }
   )
-  GUI.alert(type(data) .. type(test))
-  GUI.alert(test)
+  
+  -- moves progress indicator by one
+  prog:roll()
+  workspace:draw()
+
+  GUI.alert(type(data) .. type(test)) -- note: json isnt being parsed lmao
 end
 
 -- add text
