@@ -7,7 +7,7 @@ app.get('/', (req, res) => {
 	res.json({ success: true });
 });
 app.post('/login', (req, res) => {
-	console.log('Request: ', JSON.stringify(req));
+	console.log('Request: ', req.get('Content-Type'));
 	let bot = new Discord.Client();
 	bot.on('ready', () => {
 		res.json({
