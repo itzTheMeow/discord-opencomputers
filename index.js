@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const app = require('express')();
 const config = require('./config.json');
-app.use(require('body-parser').json());
+//app.use(require('body-parser').json());
 
 app.get('/', (req, res) => {
 	res.json({ success: true });
