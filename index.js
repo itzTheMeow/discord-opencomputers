@@ -17,5 +17,5 @@ app.post('/login', (req, res) => {
 });
 
 app.listen(config.port, () => {
-	console.log('App online!');
+	console.log('App is online!');
 });
