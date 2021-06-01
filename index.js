@@ -9,7 +9,14 @@ app.get('/', (req, res) => {
 app.post('/login', (req, res) => {
 	let bot = new Discord.Client();
 	bot.on('ready', () => {
-		res.json({ success: true, client: bot.toJSON() });
+		res.json({
+			success: true,
+			client: {
+				channels: bot.channels.cache.map((c) => c.toJSON()),
+				guilds: bot.guilds.cache.map((g) => g.toJSON()),
+				user: bot.user.toJSON(),
+			},
+		});
 	});
 	bot.login(req.body.token).catch((err) => {
 		res.json({ success: false, error: err });
