@@ -44,7 +44,6 @@ local login = function()
   
   prog:roll()
   workspace:draw()
-  GUI.alert(type(data) .. type(test))
   GUI.alert(data .. test)
 end
 
